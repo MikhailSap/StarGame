@@ -67,10 +67,7 @@ public class MenuScreen extends BaseScreen {
 
         bound.set(screenX, screenY);
         v = bound.cpy().sub(position);
-        System.out.println("x "+screenX+" y "+screenY);
-        System.out.println("xn "+v.x+" yn "+v.y);
         v.nor();
-        System.out.println("X "+v.x+" Y "+v.y);
         return false;
     }
 
