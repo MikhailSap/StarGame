@@ -3,28 +3,29 @@ package sap.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import sap.game.base.BaseScreen;
+import sap.game.math.Rect;
+import sap.game.sprite.Background;
+import sap.game.sprite.Logo;
 
 public class MenuScreen extends BaseScreen {
     private Texture img;
-    private Vector2 position;
-    private Vector2 bound;
-    private Vector2 v;
-    private int drawWidth = 50;
-    private int drawHeight = 50;
-    private boolean isKeyDown;
+    private Texture bg;
+    private Logo logo;
+    private Background background;
 
 
     @Override
     public void show() {
         super.show();
         img = new Texture("zonda.jpg");
-
-        position = new Vector2(0, 0);
-        v = new Vector2(0, 0);
-        bound = new Vector2(0,0);
+        bg = new Texture("textures/bg.jpg");
+        logo = new Logo(new TextureRegion(img));
+        logo.setHeightProportion(0.5f);
+        background = new Background(new TextureRegion(bg));
     }
 
     @Override
@@ -33,56 +34,30 @@ public class MenuScreen extends BaseScreen {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(img, position.x, position.y,  drawWidth, drawHeight);
+        background.draw(batch);
+        logo.draw(batch);
+        //batch.draw(img, position.x, position.y,  0.5f, 0.5f);
         batch.end();
-        if (isKeyDown) {
-            position.add(v);
-            isKeyDown = false;
-        }
-        if (v.x>0&&v.y>0)
-        if (bound.x > position.x || bound.y > position.y)
-        position.add(v);
-        if (v.x<0&&v.y<0)
-        if (bound.x < position.x || bound.y < position.y)
-        position.add(v);
-        if (v.x>0&&v.y<0)
-        if (bound.x > position.x || bound.y < position.y)
-        position.add(v);
-        if (v.x<0&&v.y>0)
-        if (bound.x < position.x || bound.y > position.y)
-        position.add(v);
+
+        logo.update(delta);
+    }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer) {
+        logo.touchDown(touch, pointer);
+        return false;
+    }
+
+    @Override
+    public void resize(Rect worldBounds) {
+        super.resize(worldBounds);
+        background.resize(worldBounds);
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        batch.dispose();
         img.dispose();
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        super.touchDown(screenX, screenY, pointer, button);
-        screenY = Gdx.graphics.getHeight()-screenY;
-
-        bound.set(screenX, screenY);
-        v = bound.cpy().sub(position);
-        v.nor();
-        return false;
-    }
-
-    @Override
-    public boolean keyDown(int keycode) {
-        super.keyDown(keycode);
-        isKeyDown = true;
-        if (keycode == 19)
-            v.set(0, 3);
-        if (keycode == 20)
-            v.set(0, -3);
-        if (keycode == 21)
-            v.set(-3, 0);
-        if (keycode == 22)
-            v.set(3, 0);
-        return false;
+        bg.dispose();
     }
 }
