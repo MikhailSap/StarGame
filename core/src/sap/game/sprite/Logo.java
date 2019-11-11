@@ -31,8 +31,6 @@ public class Logo extends Sprite {
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        System.out.println(touch.x + " " + touch.y);
-        System.out.println(pos.x + " " + pos.y);
         this.touch.set(touch);
         v.set(touch.cpy().sub(pos).setLength(V_LEN));
         return false;
