@@ -1,8 +1,6 @@
 package sap.game.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,46 +9,41 @@ import com.badlogic.gdx.math.Vector2;
 import sap.game.base.BaseScreen;
 import sap.game.math.Rect;
 import sap.game.sprite.Background;
-import sap.game.sprite.ButtonExit;
-import sap.game.sprite.ButtonPlay;
+import sap.game.sprite.SpaceShip;
 import sap.game.sprite.Star;
 
-public class MenuScreen extends BaseScreen {
-    private Game game;
+public class GameScreen extends BaseScreen {
     private final int STAR_COUNT = 128;
     private Texture bg;
     private TextureAtlas atlas;
     private Star[] stars;
     private Background background;
-    private ButtonExit buttonExit;
-    private ButtonPlay buttonPlay;
+    private SpaceShip ship;
+    private SpaceShip shipFlash;
+    private int test;
 
-    public MenuScreen(Game game) {
-        this.game = game;
-    }
 
     @Override
     public void show() {
         super.show();
         bg = new Texture("textures/bg.png");
-        atlas = new TextureAtlas("textures/menuAtlas.tpack");
+        atlas = new TextureAtlas("textures/mainAtlas.tpack");
         background = new Background(new TextureRegion(bg));
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < STAR_COUNT; i++) {
             stars[i] = new Star(atlas);
         }
-        buttonExit = new ButtonExit(atlas);
-        buttonPlay = new ButtonPlay(atlas, game);
-
+        TextureRegion textureRegion = atlas.findRegion("main_ship");
+        TextureRegion[][] split = textureRegion.split(textureRegion.getRegionWidth()/2, textureRegion.getRegionHeight());
+        ship = new SpaceShip(split[0][0]);
+        shipFlash = new SpaceShip(split[0][1]);
     }
 
     @Override
     public void render(float delta) {
-        super.render(delta);
-        //Gdx.gl.glClearColor(1, 0, 0, 1);
-        //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         draw();
         update(delta);
+
     }
 
     private void draw() {
@@ -58,40 +51,28 @@ public class MenuScreen extends BaseScreen {
         background.draw(batch);
         for (Star star : stars)
             star.draw(batch);
-        buttonExit.draw(batch);
-        buttonPlay.draw(batch);
+        if (((test/10)%2==0)) {
+            ship.draw(batch);
+        }
+        else {
+            shipFlash.draw(batch);
+        }
         batch.end();
-
     }
 
     private void update(float delta) {
         for (Star star : stars)
             star.update(delta);
-    }
-
-    @Override
-    public boolean touchDown(Vector2 touch, int pointer) {
-        buttonExit.touchDown(touch, pointer);
-        buttonPlay.touchDown(touch, pointer);
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(Vector2 touch, int pointer) {
-        buttonExit.toucUp(touch, pointer);
-        buttonPlay.toucUp(touch, pointer);
-        return false;
+        test++;
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         background.resize(worldBounds);
         for (Star star : stars)
             star.resize(worldBounds);
-        buttonExit.resize(worldBounds);
-        buttonPlay.resize(worldBounds);
-
+        ship.resize(worldBounds);
+        shipFlash.resize(worldBounds);
     }
 
     @Override
@@ -99,5 +80,25 @@ public class MenuScreen extends BaseScreen {
         super.dispose();
         bg.dispose();
         atlas.dispose();
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return super.keyDown(keycode);
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return super.keyUp(keycode);
+    }
+
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer) {
+        return super.touchDown(touch, pointer);
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        return super.touchUp(touch, pointer);
     }
 }
