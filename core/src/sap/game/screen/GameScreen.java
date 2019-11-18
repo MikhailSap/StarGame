@@ -12,6 +12,7 @@ import sap.game.base.BaseScreen;
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
 import sap.game.sprite.Background;
+import sap.game.sprite.EnemyShip;
 import sap.game.sprite.SpaceShip;
 import sap.game.sprite.Star;
 
@@ -22,6 +23,7 @@ public class GameScreen extends BaseScreen {
     private Star[] stars;
     private Background background;
     private SpaceShip ship;
+    private EnemyShip enemy;
     BulletPool bulletPool;
     Music music;
 
@@ -38,6 +40,7 @@ public class GameScreen extends BaseScreen {
         }
         bulletPool = new BulletPool();
         ship = new SpaceShip(atlas, bulletPool);
+        enemy = new EnemyShip(atlas, bulletPool);
         music = Gdx.audio.newMusic(Gdx.files.internal("music/main_theme.mp3"));
         music.play();
     }
@@ -55,6 +58,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars)
             star.draw(batch);
         ship.draw(batch);
+        enemy.draw(batch);
         bulletPool.drawSprites(batch);
         batch.end();
     }
@@ -63,6 +67,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars)
             star.update(delta);
         ship.update(delta);
+        enemy.update(delta);
         bulletPool.updateSprites(delta);
     }
 
@@ -72,6 +77,7 @@ public class GameScreen extends BaseScreen {
         for (Star star : stars)
             star.resize(worldBounds);
         ship.resize(worldBounds);
+        enemy.resize(worldBounds);
     }
 
     @Override
