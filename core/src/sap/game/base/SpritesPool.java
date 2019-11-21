@@ -6,36 +6,48 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SpritesPool<T extends Sprite> {
-    protected List<T> pool = new ArrayList<>();
+    protected List<T> activePool = new ArrayList<>();
+    protected List<T> freePool = new ArrayList<>();
 
-    public abstract T get();
+    public T get() {
+        T object;
+        if (freePool.isEmpty()) {
+            object = getInstance();
+            activePool.add(object);
+        } else {
+            object = freePool.remove(freePool.size()-1);
+            activePool.add(object);
+        }
+        return object;
+    }
 
 
     public void updateSprites(float delta) {
-        for (T sprite : pool)
-            sprite.update(delta);
-    }
-
-    public void drawSprites(SpriteBatch batch) {
-        for (T sprite : pool)
-            sprite.draw(batch);
-    }
-
-    public void freeSprites() {
-        for (int i = 0; i < pool.size(); i++) {
-            if (pool.get(i).isDestroyed()) {
-                pool.remove(i);
+        for (int i = 0; i < activePool.size(); i++) {
+            if (activePool.get(i).isDestroyed()) {
+                freePool.add((T)activePool.remove(i).flushDestroyed());
                 i--;
+            } else {
+                activePool.get(i).update(delta);
             }
         }
     }
 
+    public void drawSprites(SpriteBatch batch) {
+        for (T sprite : activePool)
+            if (!sprite.isDestroyed())
+            sprite.draw(batch);
+    }
+
     public List<T> getPool() {
-        return pool;
+        return activePool;
     }
 
     public void dispose() {
-        pool.clear();
+        activePool.clear();
+        freePool.clear();
     }
+
+    public abstract T getInstance();
 
 }

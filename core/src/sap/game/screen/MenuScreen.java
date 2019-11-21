@@ -25,6 +25,8 @@ public class MenuScreen extends BaseScreen {
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
     private Music music;
+    private float sum;
+    private int test;
 
     public MenuScreen(Game game) {
         this.game = game;
@@ -43,12 +45,17 @@ public class MenuScreen extends BaseScreen {
         buttonExit = new ButtonExit(atlas);
         buttonPlay = new ButtonPlay(atlas, game);
         music = Gdx.audio.newMusic(Gdx.files.internal("music/start_theme.mp3"));
+        music.setVolume(0.05f);
         music.play();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+        test++;
+        sum+=delta;
+        if (test%60==0)
+            System.out.println(sum);
         //Gdx.gl.glClearColor(1, 0, 0, 1);
         //Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         draw();

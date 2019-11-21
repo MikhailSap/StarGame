@@ -91,4 +91,9 @@ public class Sprite extends Rect {
     public boolean isDestroyed() {
         return destroyed;
     }
+
+    public Sprite flushDestroyed() {
+        destroyed = false;
+        return this;
+    }
 }

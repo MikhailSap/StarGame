@@ -1,25 +1,17 @@
 package sap.game.sprite;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import sap.game.base.Sprite;
+import sap.game.base.Ship;
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
 
-public class SpaceShip extends Sprite {
+public class SpaceShip extends Ship {
     private final float BOTTOM_MARGIN = 0.05f;
     private final int INVALID_POINTER = -1;
-
-    private final Vector2 v0 = new Vector2(0.5f, 0);
-    private final Vector2 v = new Vector2();
-
-    private Rect worldBounds;
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-    private Vector2 bulletV = new Vector2(0, 0.5f);
 
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -27,13 +19,18 @@ public class SpaceShip extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    private final float reloadInterval = 0.2f;
-    private float reloadTimer;
 
     public SpaceShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
+        sound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        v0.set(0.5f, 0);
+        reloadInterval = 0.2f;
+        bulletHeight = 0.01f;
+        damage = 1;
+        hp = 100;
+        bulletV.set(0, 0.5f);
     }
 
     @Override
@@ -45,12 +42,7 @@ public class SpaceShip extends Sprite {
 
     @Override
     public void update(float delta) {
-        reloadTimer += delta;
-        if (reloadTimer > reloadInterval) {
-            reloadTimer = 0f;
-            shoot();
-        }
-        pos.mulAdd(v, delta);
+        super.update(delta);
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
             stop();
@@ -143,6 +135,10 @@ public class SpaceShip extends Sprite {
 
     }
 
+    public void dispose() {
+        sound.dispose();
+    }
+
     private void moveRight() {
         v.set(v0);
     }
@@ -154,12 +150,4 @@ public class SpaceShip extends Sprite {
     private void stop() {
         v.setZero();
     }
-
-    private void shoot() {
-        Bullet bullet = bulletPool.get();
-        bullet.set(worldBounds, bulletV, 1, this, bulletRegion, pos, 0.01f);
-    }
-
-
-
 }
