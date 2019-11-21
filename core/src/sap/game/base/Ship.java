@@ -9,8 +9,8 @@ import sap.game.pool.BulletPool;
 import sap.game.sprite.Bullet;
 
 public class Ship extends Sprite {
-    protected final Vector2 v0 = new Vector2();
-    protected final Vector2 v = new Vector2();
+    protected final Vector2 V_NORMAL = new Vector2();
+    protected final Vector2 V = new Vector2();
 
     protected Rect worldBounds;
     protected BulletPool bulletPool;
@@ -39,7 +39,7 @@ public class Ship extends Sprite {
             reloadTimer = 0f;
             shoot();
         }
-        pos.mulAdd(v, delta);
+        pos.mulAdd(V, delta);
     }
 
     protected void shoot() {

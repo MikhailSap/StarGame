@@ -25,7 +25,7 @@ public class SpaceShip extends Ship {
         this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
         sound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
-        v0.set(0.5f, 0);
+        V_NORMAL.set(0.5f, 0);
         reloadInterval = 0.2f;
         bulletHeight = 0.01f;
         damage = 1;
@@ -140,14 +140,14 @@ public class SpaceShip extends Ship {
     }
 
     private void moveRight() {
-        v.set(v0);
+        V.set(V_NORMAL);
     }
 
     private void moveLeft() {
-        v.set(v0).rotate(180);
+        V.set(V_NORMAL).rotate(180);
     }
 
     private void stop() {
-        v.setZero();
+        V.setZero();
     }
 }

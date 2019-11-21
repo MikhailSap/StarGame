@@ -16,20 +16,20 @@ public class EnemyShip extends Ship {
     public EnemyShip(BulletPool bulletPool, Rect worldBounds) {
         this.bulletPool = bulletPool;
         this.worldBounds = worldBounds;
-        this.v.set(V_START);
+        this.V.set(V_START);
     }
 
     @Override
     public void update(float delta) {
         super.update(delta);
         if (!flag && getBottom() < worldBounds.getTop()-getHeight()) {
-            this.v.set(v0);
+            this.V.set(V_NORMAL);
             this.reloadTimer = reloadInterval;
             this.flag = true;
         }
         if (getTop() < worldBounds.getBottom()) {
             this.flag = false;
-            this.v.set(V_START);
+            this.V.set(V_START);
             destroy();
         }
     }
@@ -47,7 +47,7 @@ public class EnemyShip extends Ship {
             int hp
     ) {
         this.regions = regions;
-        this.v0.set(v0);
+        this.V_NORMAL.set(v0);
         this.bulletRegion = bulletRegion;
         this.bulletHeight = bulletHeight;
         this.bulletV.set(0, bulletVY);
