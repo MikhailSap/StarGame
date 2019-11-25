@@ -6,14 +6,17 @@ import com.badlogic.gdx.math.Vector2;
 
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
+import sap.game.pool.ExplosionPool;
 import sap.game.sprite.Bullet;
+import sap.game.sprite.Explosion;
 
-public class Ship extends Sprite {
+public abstract class Ship extends Sprite {
     protected final Vector2 V_NORMAL = new Vector2();
     protected final Vector2 V = new Vector2();
 
     protected Rect worldBounds;
     protected BulletPool bulletPool;
+    protected ExplosionPool explosionPool;
     protected TextureRegion bulletRegion;
     protected Vector2 bulletV = new Vector2();
     protected Sound sound;
@@ -24,6 +27,10 @@ public class Ship extends Sprite {
 
     protected float reloadInterval;
     protected float reloadTimer;
+
+    protected float animateInterval = 0.05f;
+    protected float animateTimer = animateInterval;
+
 
     public Ship() {
     }
@@ -39,12 +46,40 @@ public class Ship extends Sprite {
             reloadTimer = 0f;
             shoot();
         }
+        animateTimer += delta;
+        if (animateTimer > animateInterval)
+            frame = 0;
         pos.mulAdd(V, delta);
+    }
+
+    public void damage(int damage) {
+        animateTimer = 0;
+        frame = 1;
+        hp -= damage;
+        if (this.getClass().getCanonicalName().equals("sap.game.sprite.SpaceShip"))
+        System.out.println(this.hp);
+        if (hp <= 0)
+            destroy();
     }
 
     protected void shoot() {
         sound.play(0.3f);
         Bullet bullet = bulletPool.get();
         bullet.set(worldBounds, bulletV, damage, this, bulletRegion, pos, bulletHeight);
+    }
+
+    public abstract boolean isBulletCollision(Rect bullet);
+
+
+    protected void boom() {
+        Explosion explosion = explosionPool.get();
+        explosion.set(pos, getHeight());
+    }
+
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
     }
 }

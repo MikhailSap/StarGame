@@ -86,7 +86,6 @@ public class BaseScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        System.out.println("nahal - "+keycode);
         return false;
     }
 

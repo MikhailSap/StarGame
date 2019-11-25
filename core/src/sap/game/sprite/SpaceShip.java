@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 import sap.game.base.Ship;
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
+import sap.game.pool.ExplosionPool;
 
 public class SpaceShip extends Ship {
     private final float BOTTOM_MARGIN = 0.05f;
@@ -20,16 +21,17 @@ public class SpaceShip extends Ship {
     private int rightPointer = INVALID_POINTER;
 
 
-    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool) {
         super(atlas.findRegion("main_ship"), 1, 2, 2);
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
         sound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         V_NORMAL.set(0.5f, 0);
         reloadInterval = 0.2f;
         bulletHeight = 0.01f;
         damage = 1;
-        hp = 100;
+        hp = 15;
         bulletV.set(0, 0.5f);
     }
 
@@ -149,5 +151,18 @@ public class SpaceShip extends Ship {
 
     private void stop() {
         V.setZero();
+    }
+
+    private boolean collision;
+    public boolean isBulletCollision(Rect bullet) {
+        collision = bullet.getLeft() > getLeft() &&
+                bullet.getRight() < getRight() &&
+                bullet.getBottom() < pos.y;
+        return collision;
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
     }
 }

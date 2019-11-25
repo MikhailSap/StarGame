@@ -39,7 +39,7 @@ public abstract class SpritesPool<T extends Sprite> {
             sprite.draw(batch);
     }
 
-    public List<T> getPool() {
+    public List<T> getActiveSprites() {
         return activePool;
     }
 

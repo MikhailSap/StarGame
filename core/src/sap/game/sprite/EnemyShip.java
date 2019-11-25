@@ -7,14 +7,16 @@ import com.badlogic.gdx.math.Vector2;
 import sap.game.base.Ship;
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
+import sap.game.pool.ExplosionPool;
 
 public class EnemyShip extends Ship {
 
     private final Vector2 V_START = new Vector2(0,-0.5f);
     private boolean flag;
 
-    public EnemyShip(BulletPool bulletPool, Rect worldBounds) {
+    public EnemyShip(BulletPool bulletPool, Rect worldBounds, ExplosionPool explosionPool) {
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.worldBounds = worldBounds;
         this.V.set(V_START);
     }
@@ -27,9 +29,7 @@ public class EnemyShip extends Ship {
             this.reloadTimer = reloadInterval;
             this.flag = true;
         }
-        if (getTop() < worldBounds.getBottom()) {
-            this.flag = false;
-            this.V.set(V_START);
+        if (getBottom() < worldBounds.getBottom()) {
             destroy();
         }
     }
@@ -56,5 +56,22 @@ public class EnemyShip extends Ship {
         this.sound = sound;
         setHeightProportion(height);
         this.hp = hp;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return bullet.getLeft() > getLeft() &&
+                bullet.getRight() < getRight() &&
+                bullet.getTop() > pos.y;
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        flag = false;
+        V.set(V_START);
     }
 }

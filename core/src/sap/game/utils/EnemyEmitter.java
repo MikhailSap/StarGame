@@ -17,7 +17,7 @@ public class EnemyEmitter {
     private static final int SMALL_BULLET_DAMAGE = 1;
     private static final float SMALL_RELOAD_INTERVAL = 2f;
     private static final float SMALL_HEIGHT = 0.1f;
-    private static final int SMALL_HP = 1;
+    private static final int SMALL_HP = 3;
 
     private static final float MIDDLE_BULLET_HEIGHT = 0.02f;
     private static final float MIDDLE_BULLET_VY = -0.25f;
