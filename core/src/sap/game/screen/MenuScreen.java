@@ -1,13 +1,10 @@
 package sap.game.screen;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.base.BaseScreen;
 import sap.game.math.Rect;
 import sap.game.sprite.Background;
@@ -24,7 +21,6 @@ public class MenuScreen extends BaseScreen {
     private Background background;
     private ButtonExit buttonExit;
     private ButtonPlay buttonPlay;
-    private Music music;
 
     public MenuScreen(Game game) {
         this.game = game;
@@ -42,9 +38,8 @@ public class MenuScreen extends BaseScreen {
         }
         buttonExit = new ButtonExit(atlas);
         buttonPlay = new ButtonPlay(atlas, game);
-        music = Gdx.audio.newMusic(Gdx.files.internal("music/start_theme.mp3"));
-        music.setVolume(0.05f);
-        music.play();
+        menuTheme.setVolume(0.05f);
+        menuTheme.play();
     }
 
     @Override
@@ -52,22 +47,6 @@ public class MenuScreen extends BaseScreen {
         super.render(delta);
         draw();
         update(delta);
-    }
-
-    private void draw() {
-        batch.begin();
-        background.draw(batch);
-        for (Star star : stars)
-            star.draw(batch);
-        buttonExit.draw(batch);
-        buttonPlay.draw(batch);
-        batch.end();
-
-    }
-
-    private void update(float delta) {
-        for (Star star : stars)
-            star.update(delta);
     }
 
     @Override
@@ -98,8 +77,24 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-        music.stop();
+        menuTheme.stop();
         bg.dispose();
         atlas.dispose();
+    }
+
+    private void draw() {
+        batch.begin();
+        background.draw(batch);
+        for (Star star : stars)
+            star.draw(batch);
+        buttonExit.draw(batch);
+        buttonPlay.draw(batch);
+        batch.end();
+
+    }
+
+    private void update(float delta) {
+        for (Star star : stars)
+            star.update(delta);
     }
 }

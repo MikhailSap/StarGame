@@ -3,7 +3,6 @@ package sap.game.pool;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
 import sap.game.base.SpritesPool;
 import sap.game.sprite.Explosion;
 

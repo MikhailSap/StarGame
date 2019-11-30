@@ -3,11 +3,11 @@ package sap.game.base;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix3;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.math.MatrixUtils;
 import sap.game.math.Rect;
 
@@ -23,6 +23,8 @@ public class BaseScreen implements Screen, InputProcessor {
 
     private Vector2 touch;
 
+    protected Music menuTheme;
+
     public BaseScreen() {
         screenBounds = new Rect();
         worldBounds = new Rect();
@@ -37,6 +39,9 @@ public class BaseScreen implements Screen, InputProcessor {
     public void show() {
         batch = new SpriteBatch();
         Gdx.input.setInputProcessor(this);
+        menuTheme = Gdx.audio.newMusic(Gdx.files.internal("music/start_theme.mp3"));
+        menuTheme.setLooping(true);
+        menuTheme.setVolume(0.1f);
     }
 
     @Override

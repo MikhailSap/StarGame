@@ -4,13 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.base.Ship;
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
 import sap.game.pool.ExplosionPool;
 
 public class SpaceShip extends Ship {
+    private final int HP = 30;
+    private final Vector2 START_POS = new Vector2();
     private final float BOTTOM_MARGIN = 0.05f;
     private final int INVALID_POINTER = -1;
 
@@ -31,8 +32,28 @@ public class SpaceShip extends Ship {
         reloadInterval = 0.2f;
         bulletHeight = 0.01f;
         damage = 1;
-        hp = 15;
+        hp = HP;
         bulletV.set(0, 0.5f);
+    }
+
+    public void startNewGame() {
+        hp = HP;
+        pressedLeft = false;
+        pressedRight = false;
+        leftPointer = INVALID_POINTER;
+        rightPointer = INVALID_POINTER;
+        flushDestroyed();
+        stop();
+        pos.set(START_POS);
+        setBottom(worldBounds.getBottom() + BOTTOM_MARGIN);
+    }
+
+    public int getHP() {
+        return hp;
+    }
+
+    public void setHP(int hp) {
+        this.hp = hp;
     }
 
     @Override
@@ -45,6 +66,7 @@ public class SpaceShip extends Ship {
     @Override
     public void update(float delta) {
         super.update(delta);
+        reloadTimer += delta;
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
             stop();
@@ -153,12 +175,10 @@ public class SpaceShip extends Ship {
         V.setZero();
     }
 
-    private boolean collision;
     public boolean isBulletCollision(Rect bullet) {
-        collision = bullet.getLeft() > getLeft() &&
+         return bullet.getLeft() > getLeft() &&
                 bullet.getRight() < getRight() &&
                 bullet.getBottom() < pos.y;
-        return collision;
     }
 
     @Override

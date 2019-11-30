@@ -2,7 +2,6 @@ package sap.game.sprite;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
 import sap.game.base.ScaledTouchUpButton;
 import sap.game.math.Rect;
 

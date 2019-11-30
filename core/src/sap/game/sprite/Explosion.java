@@ -3,7 +3,6 @@ package sap.game.sprite;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.base.Sprite;
 
 public class Explosion extends Sprite {

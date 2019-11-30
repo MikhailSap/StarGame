@@ -2,7 +2,7 @@ package sap.game.sprite;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
+import sap.game.base.Ship;
 import sap.game.base.Sprite;
 import sap.game.math.Rect;
 
@@ -10,7 +10,7 @@ public class Bullet extends Sprite {
     private Rect worldBounds;
     private final Vector2 v = new Vector2();
     private int damage;
-    private Sprite owner;
+    private Ship owner;
 
 
     public Bullet() {
@@ -21,7 +21,7 @@ public class Bullet extends Sprite {
             Rect worldBounds,
             Vector2 v,
             int damage,
-            Sprite owner,
+            Ship owner,
             TextureRegion region,
             Vector2 pos,
             float height
@@ -46,7 +46,7 @@ public class Bullet extends Sprite {
         return damage;
     }
 
-    public Sprite getOwner() {
+    public Ship getOwner() {
         return owner;
     }
 }

@@ -1,7 +1,6 @@
 package sap.game.sprite;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-
 import sap.game.base.Sprite;
 import sap.game.math.Rect;
 

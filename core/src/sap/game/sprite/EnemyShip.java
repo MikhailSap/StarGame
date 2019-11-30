@@ -3,7 +3,6 @@ package sap.game.sprite;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.base.Ship;
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
@@ -29,9 +28,10 @@ public class EnemyShip extends Ship {
             this.reloadTimer = reloadInterval;
             this.flag = true;
         }
-        if (getBottom() < worldBounds.getBottom()) {
+        if (flag)
+            reloadTimer += delta;
+        if (isOutside(worldBounds))
             destroy();
-        }
     }
 
     public void set(

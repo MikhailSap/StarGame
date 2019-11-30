@@ -2,7 +2,6 @@ package sap.game.sprite;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.base.Sprite;
 import sap.game.math.Rect;
 import sap.game.math.Rnd;

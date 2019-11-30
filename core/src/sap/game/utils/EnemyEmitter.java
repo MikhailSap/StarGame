@@ -5,7 +5,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.math.Rect;
 import sap.game.math.Rnd;
 import sap.game.pool.EnemyPool;
@@ -33,7 +32,7 @@ public class EnemyEmitter {
     private static final float BIG_HEIGHT = 0.2f;
     private static final int BIG_HP = 10;
 
-    private float generateInterval = 4f;
+    private float generateInterval = 2f;
     private float generateTimer;
 
     private EnemyPool enemyPool;
@@ -49,6 +48,7 @@ public class EnemyEmitter {
     private Vector2 enemyBigV = new Vector2(0, -0.05f);
 
     private Sound sound;
+    private int level = 1;
 
     public EnemyEmitter(EnemyPool enemyPool, TextureAtlas atlas, Rect worldBounds) {
         this.enemyPool = enemyPool;
@@ -60,7 +60,8 @@ public class EnemyEmitter {
         sound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
     }
 
-    public void generate(float delta) {
+    public void generate(float delta, int frags) {
+        level = frags / 10 + 1;
         generateTimer += delta;
         if (generateTimer >= generateInterval) {
             generateTimer = 0f;
@@ -73,7 +74,7 @@ public class EnemyEmitter {
                         bulletRegion,
                         SMALL_BULLET_HEIGHT,
                         SMALL_BULLET_VY,
-                        SMALL_BULLET_DAMAGE,
+                        SMALL_BULLET_DAMAGE * level,
                         SMALL_RELOAD_INTERVAL,
                         sound,
                         SMALL_HEIGHT,
@@ -86,7 +87,7 @@ public class EnemyEmitter {
                         bulletRegion,
                         MIDDLE_BULLET_HEIGHT,
                         MIDDLE_BULLET_VY,
-                        MIDDLE_BULLET_DAMAGE,
+                        MIDDLE_BULLET_DAMAGE * level,
                         MIDDLE_RELOAD_INTERVAL,
                         sound,
                         MIDDLE_HEIGHT,
@@ -99,7 +100,7 @@ public class EnemyEmitter {
                         bulletRegion,
                         BIG_BULLET_HEIGHT,
                         BIG_BULLET_VY,
-                        BIG_BULLET_DAMAGE,
+                        BIG_BULLET_DAMAGE * level,
                         BIG_RELOAD_INTERVAL,
                         sound,
                         BIG_HEIGHT,
@@ -109,6 +110,10 @@ public class EnemyEmitter {
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());
             enemy.setBottom(worldBounds.getTop());
         }
+    }
+
+    public int getLevel() {
+        return level;
     }
 
     public void dispose() {

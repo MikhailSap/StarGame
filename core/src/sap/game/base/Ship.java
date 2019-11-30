@@ -3,7 +3,6 @@ package sap.game.base;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import sap.game.math.Rect;
 import sap.game.pool.BulletPool;
 import sap.game.pool.ExplosionPool;
@@ -41,7 +40,6 @@ public abstract class Ship extends Sprite {
 
     @Override
     public void update(float delta) {
-        reloadTimer += delta;
         if (reloadTimer > reloadInterval) {
             reloadTimer = 0f;
             shoot();
@@ -56,10 +54,19 @@ public abstract class Ship extends Sprite {
         animateTimer = 0;
         frame = 1;
         hp -= damage;
-        if (this.getClass().getCanonicalName().equals("sap.game.sprite.SpaceShip"))
-        System.out.println(this.hp);
-        if (hp <= 0)
+        if (hp <= 0) {
+            hp = 0;
             destroy();
+        }
+    }
+
+    public abstract boolean isBulletCollision(Rect bullet);
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        if (!this.isOutside(worldBounds))
+        boom();
     }
 
     protected void shoot() {
@@ -68,18 +75,8 @@ public abstract class Ship extends Sprite {
         bullet.set(worldBounds, bulletV, damage, this, bulletRegion, pos, bulletHeight);
     }
 
-    public abstract boolean isBulletCollision(Rect bullet);
-
-
     protected void boom() {
         Explosion explosion = explosionPool.get();
         explosion.set(pos, getHeight());
-    }
-
-
-    @Override
-    public void destroy() {
-        super.destroy();
-        boom();
     }
 }

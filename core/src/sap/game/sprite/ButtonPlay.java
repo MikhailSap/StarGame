@@ -2,7 +2,6 @@ package sap.game.sprite;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
 import sap.game.base.ScaledTouchUpButton;
 import sap.game.math.Rect;
 import sap.game.screen.GameScreen;
@@ -26,7 +25,7 @@ public class ButtonPlay extends ScaledTouchUpButton {
 
     @Override
     public void action() {
-        game.setScreen(new GameScreen(game));
+        game.setScreen(new GameScreen());
 
     }
 }

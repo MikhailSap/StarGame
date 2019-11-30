@@ -1,7 +1,6 @@
 package sap.game.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +30,12 @@ public abstract class SpritesPool<T extends Sprite> {
                 activePool.get(i).update(delta);
             }
         }
+    }
+
+    public void freeAllSprites() {
+        for (T sprite : activePool)
+            freePool.add((T)sprite.flushDestroyed());
+        activePool.clear();
     }
 
     public void drawSprites(SpriteBatch batch) {
