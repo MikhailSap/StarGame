@@ -16,6 +16,7 @@ import sap.game.pool.EnemyPool;
 import sap.game.pool.ExplosionPool;
 import sap.game.sprite.Background;
 import sap.game.sprite.Bullet;
+import sap.game.sprite.ButtonExit;
 import sap.game.sprite.ButtonNewGame;
 import sap.game.sprite.EnemyShip;
 import sap.game.sprite.GameOver;
@@ -34,13 +35,15 @@ public class GameScreen extends BaseScreen {
     private final String LEVEL = "Level: ";
 
     private Texture bg;
-    private TextureAtlas atlas;
+    private TextureAtlas gameAtlas;
+    private TextureAtlas menuAtlas;
 
     private Star[] stars;
     private Background background;
     private GameOver gameOver;
 
-    private ButtonNewGame newGame;
+    private ButtonNewGame buttonNewGame;
+    private ButtonExit buttonExit;
     private SpaceShip ship;
     private BulletPool bulletPool;
     private EnemyPool enemyPool;
@@ -60,19 +63,21 @@ public class GameScreen extends BaseScreen {
     public void show() {
         super.show();
         bg = new Texture("textures/bg.png");
-        atlas = new TextureAtlas("textures/mainAtlas.tpack");
+        menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
+        gameAtlas = new TextureAtlas("textures/mainAtlas.tpack");
         background = new Background(new TextureRegion(bg));
-        gameOver = new GameOver(atlas);
-        newGame = new ButtonNewGame(atlas, this);
+        gameOver = new GameOver(gameAtlas);
+        buttonNewGame = new ButtonNewGame(gameAtlas, this);
+        buttonExit = new ButtonExit((menuAtlas));
         stars = new Star[STAR_COUNT];
         for (int i = 0; i < STAR_COUNT; i++) {
-            stars[i] = new Star(atlas);
+            stars[i] = new Star(gameAtlas);
         }
         bulletPool = new BulletPool();
-        explosionPool = new ExplosionPool(atlas);
+        explosionPool = new ExplosionPool(gameAtlas);
         enemyPool = new EnemyPool(worldBounds, bulletPool, explosionPool);
-        ship = new SpaceShip(atlas, bulletPool, explosionPool);
-        enemyEmitter = new EnemyEmitter(enemyPool, atlas, worldBounds);
+        ship = new SpaceShip(gameAtlas, bulletPool, explosionPool);
+        enemyEmitter = new EnemyEmitter(enemyPool, gameAtlas, worldBounds);
         playingTheme = Gdx.audio.newMusic(Gdx.files.internal("music/main_theme.mp3"));
         playingTheme.setLooping(true);
         playingTheme.setVolume(0.1f);
@@ -100,7 +105,8 @@ public class GameScreen extends BaseScreen {
             star.resize(worldBounds);
         ship.resize(worldBounds);
         gameOver.resize(worldBounds);
-        newGame.resize(worldBounds);
+        buttonNewGame.resize(worldBounds);
+        buttonExit.resize(worldBounds);
     }
 
     @Override
@@ -118,16 +124,20 @@ public class GameScreen extends BaseScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         ship.touchDown(touch, pointer);
-        if (state == State.GAME_OVER)
-            newGame.touchDown(touch, pointer);
+        if (state == State.GAME_OVER) {
+            buttonNewGame.touchDown(touch, pointer);
+            buttonExit.touchDown(touch, pointer);
+        }
         return false;
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
         ship.toucUp(touch, pointer);
-        if (state == State.GAME_OVER)
-            newGame.toucUp(touch, pointer);
+        if (state == State.GAME_OVER) {
+            buttonNewGame.toucUp(touch, pointer);
+            buttonExit.toucUp(touch, pointer);
+        }
         return false;
     }
 
@@ -167,7 +177,8 @@ public class GameScreen extends BaseScreen {
         playingTheme.stop();
         menuTheme.stop();
         bg.dispose();
-        atlas.dispose();
+        gameAtlas.dispose();
+        menuAtlas.dispose();
         ship.dispose();
         bulletPool.dispose();
         enemyPool.dispose();
@@ -202,7 +213,8 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawSprites(batch);
         } else if (state == State.GAME_OVER) {
             gameOver.draw(batch);
-            newGame.draw(batch);
+            buttonNewGame.draw(batch);
+            buttonExit.draw(batch);
         }
         printStat();
         explosionPool.drawSprites(batch);
